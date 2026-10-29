@@ -2,7 +2,7 @@
 
 **v1.1 · A CTF-focused terminal agent.**
 
-An animated skull, a clean chat interface, and a practical collection of CTF skills, web research tools, and multi-agent workflows. Run it as **`0xfun`**—no aliases and no separately installed agent command.
+0xfun runs a model-backed CTF workflow from your terminal: inspect challenge files, test a hypothesis with local tools, and verify the result against the target. It bundles references for web exploitation, binary exploitation, reverse engineering, cryptography, forensics, OSINT, and AI/ML challenges, plus web research and subagent integrations. Each challenge uses a separate working folder with a `checkpoint.md` for resuming analysis. You supply the model access and external security tools.
 
 ```text
 0xfun v1.1 · CTF agent
@@ -58,7 +58,7 @@ node bin/0xfun.mjs
 
 ### Exact release / reproducible installation
 
-`main` installs the current main-branch commit. For the exact v1.1 release, check out its tag before installing (the maintainer must publish the tag first):
+`main` installs the current main-branch commit, including changes listed under **Unreleased** in the changelog. For the original v1.1 release, check out its existing tag before installing:
 
 ```bash
 git clone --branch v1.1.0 https://github.com/xlBABA/0xfun-agent.git 0xfun && cd 0xfun
@@ -136,6 +136,29 @@ Use a model your provider currently offers. Do not paste real keys into tracked 
 0xfun --help --all                  # Full advanced runtime options
 ```
 
+### Challenge folders and resuming work
+
+When you give the agent a challenge, its operating instructions require a folder named after that challenge before analysis starts. Inputs are copied into that folder; downloads, extracted files, scripts, logs, and `checkpoint.md` stay there. A different challenge with the same name gets an event/ID suffix or a numbered suffix instead of sharing the existing checkpoint.
+
+```text
+~/ctf/
+├── Login Maze/
+│   ├── checkpoint.md
+│   └── solve.py
+└── Broken Cipher/
+    ├── checkpoint.md
+    └── challenge.txt
+```
+
+The checkpoint records the absolute working directory and challenge identity. To start a fresh conversation after a handoff, launch from that directory:
+
+```bash
+cd "$HOME/ctf/Login Maze"
+0xfun "Read checkpoint.md and continue from Next step."
+```
+
+Use `0xfun --continue` from the same folder to reopen its latest saved conversation. `/new` clears conversation context but retains the current session directory; running `cd` in a shell tool does not change the directory of later tool calls. The folder rule is agent guidance, not a filesystem sandbox or an automatic session restart. During a session launched from a parent directory, the agent must use absolute file paths and explicitly enter the challenge folder in each shell command.
+
 Useful chat commands:
 
 | Command | Purpose |
@@ -153,7 +176,7 @@ Type `/` and use completion to discover the bundled skills, prompt templates, re
 
 ## What's included
 
-- Your **AGENTS.md** CTF operating loop, including flag verification, per-challenge checkpoints, and the additional evidence/action rules already present in this repository. The original local edition is preserved in `docs/AGENTS.original-local.md`.
+- The **AGENTS.md** CTF operating loop: challenge folder setup, evidence-based testing, flag verification, and checkpoint handoffs. The original local edition is preserved in `docs/AGENTS.original-local.md`.
 - The complete portable CTF skill directories and their reference files: AI/ML, crypto, forensics, malware, misc, OSINT, pwn, reverse, web, writeups, and challenge triage.
 - Skill discovery and the two database-development skills from the current open-source profile.
 - The same pinned web-research, subagent, and security-audit integrations, including their distributed skills and prompt templates.
@@ -183,6 +206,8 @@ By default, private state is stored outside the checkout:
 ```
 
 A first run seeds the non-secret defaults and registers this checkout's bundled profile. Subsequent starts preserve user model/theme settings and edited instruction files. Moving the checkout and launching its new path updates the managed package path; if the installed command is broken after a move, rerun `npm run setup` in the new directory.
+
+Updates refresh the private `AGENTS.md` only when it still matches the previously seeded copy. If you edited `~/.0xfun/agent/AGENTS.md`, merge new operating rules from the checkout's `AGENTS.md` yourself; the launcher preserves your edits.
 
 The shared global `~/.agents/skills/` directory is excluded by default, so unrelated host-application skills and duplicate copies do not leak into a fresh 0xfun profile. Put your own additions in `~/.0xfun/agent/skills/`. You can deliberately enable shared global skills by removing the `!**/.agents/skills/**` exclusion from your private `settings.json`; that changes the baseline inventory.
 

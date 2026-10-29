@@ -15,34 +15,20 @@ You're a skilled CTF player. Your goal is to solve the challenge and find the fl
 
 ## Environment Setup
 
-Two setup strategies depending on your workflow:
-
-### Pre-install (recommended before competitions)
-
-Use the central installer entrypoint:
-
-```bash
-bash scripts/install_ctf_tools.sh all
-```
-
-Run a narrower mode when you only want one tool group:
-
-```bash
-bash scripts/install_ctf_tools.sh python
-bash scripts/install_ctf_tools.sh apt
-bash scripts/install_ctf_tools.sh brew
-bash scripts/install_ctf_tools.sh gems
-bash scripts/install_ctf_tools.sh go
-bash scripts/install_ctf_tools.sh manual
-```
-
-The full package lists now live in [scripts/install_ctf_tools.sh](../scripts/install_ctf_tools.sh).
-
-### On-demand (during challenges)
-
-Each category skill's `SKILL.md` has a **Prerequisites** section listing only the tools needed for that category. Install as you go.
+This distribution does not include a bulk CTF-tool installer. Each category skill's
+`SKILL.md` has a **Prerequisites** section. Check which tools are available and
+install the ones needed for the current challenge using the appropriate package
+manager. Keep analysis files in the challenge folder defined by `AGENTS.md`.
 
 ## Workflow
+
+### Before recon: select the challenge folder
+
+Follow `AGENTS.md`'s one-folder-per-challenge rules before downloads or target
+requests. Create or verify the challenge directory, read its `checkpoint.md` if
+present, and use that directory for every tool call. Resume from its recorded
+next action rather than repeating completed triage. A fresh session must launch
+from this directory; a shell `cd` does not relocate the agent process.
 
 ### Step 0: CTFd Platform Detection
 
@@ -61,7 +47,7 @@ export CTF_URL="https://ctf.example.com"
 export CTF_TOKEN="ctfd_..."  # Ask user for this
 ```
 
-Invoke `/ctf-misc` and load its `ctfd-navigation.md` for the full API reference and Python client class.
+Invoke `/skill:ctf-misc` and load its `ctfd-navigation.md` for the full API reference and Python client class.
 
 ### Step 1: Recon
 
@@ -104,16 +90,17 @@ Once you identify the category, **invoke the matching skill** to get specialized
 
 | Category | Invoke | When to Use |
 |----------|--------|-------------|
-| Web | `/ctf-web` | XSS, SQLi, SSTI, SSRF, JWT, file uploads, prototype pollution |
-| Pwn | `/ctf-pwn` | Buffer overflow, format string, heap, ROP, sandbox escape |
-| Crypto | `/ctf-crypto` | RSA, AES, ECC, PRNG, ZKP, classical ciphers |
-| Reverse | `/ctf-reverse` | Binary analysis, game clients, VMs, obfuscated code |
-| Forensics | `/ctf-forensics` | Disk images, memory dumps, event logs, stego, network captures |
-| OSINT | `/ctf-osint` | Social media, geolocation, DNS, public records |
-| Malware | `/ctf-malware` | Obfuscated scripts, C2 traffic, PE/.NET analysis |
-| Misc | `/ctf-misc` | Jails, encodings, RF/SDR, esoteric languages, constraint solving |
+| Web | `/skill:ctf-web` | XSS, SQLi, SSTI, SSRF, JWT, file uploads, prototype pollution |
+| Pwn | `/skill:ctf-pwn` | Buffer overflow, format string, heap, ROP, sandbox escape |
+| Crypto | `/skill:ctf-crypto` | RSA, AES, ECC, PRNG, ZKP, classical ciphers |
+| Reverse | `/skill:ctf-reverse` | Binary analysis, game clients, VMs, obfuscated code |
+| Forensics | `/skill:ctf-forensics` | Disk images, memory dumps, event logs, stego, network captures |
+| OSINT | `/skill:ctf-osint` | Social media, geolocation, DNS, public records |
+| Malware | `/skill:ctf-malware` | Obfuscated scripts, C2 traffic, PE/.NET analysis |
+| Misc | `/skill:ctf-misc` | Jails, encodings, RF/SDR, esoteric languages, constraint solving |
 
-You can also invoke `/ctf-<category>` to load the full skill instructions with detailed techniques.
+Users can invoke `/skill:ctf-<category>` to load the full instructions. As the agent,
+read the matching skill file from the exposed skill catalog; these are not shell commands.
 
 ### Step 4: Pivot When Stuck
 
@@ -141,7 +128,8 @@ If your first approach doesn't work:
 
 ### Step 5: Generate Write-up
 
-After solving the challenge, invoke `/ctf-writeup` to generate a standardized submission-style writeup — concise, reproducible, and ready for competition organizers or teammates to validate.
+Report the verified flag and stop, as required by `AGENTS.md`. If the user asks for
+a writeup, load `ctf-writeup` and save the result inside this challenge's folder.
 
 ## Flag Formats
 
@@ -153,7 +141,9 @@ Flags vary by CTF. Common formats:
 **Validation rule (important):**
 - If you find multiple flag-like strings, treat them as candidates and validate before finalizing.
 - Prefer the token tied to the intended artifact/workflow (not random metadata noise or obvious decoys).
-- Do a corpus-wide uniqueness check and include the source file/path when reporting.
+- Search only the current challenge's files for competing candidates; a unique
+  string alone is not proof of a valid flag. Record its source and verification
+  evidence in the checkpoint. Never search other challenge folders for a flag.
 
 ```bash
 # Search for common flag patterns in files

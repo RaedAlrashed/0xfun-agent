@@ -6,4 +6,8 @@ The global profile, authentication, settings, and sessions are stored under `~/.
 
 The bundled AGENTS.md contains the user's CTF operating loop. Keep tool results, flag verification, and challenge checkpoints grounded in real output. Only test targets the user is authorized to assess. Skills describe techniques; they do not install the external tools those techniques require.
 
+Set up a separate folder for each challenge before analysis, following AGENTS.md. Keep that challenge's files and checkpoint.md together, use absolute paths or an explicit working directory for every tool call, and pass the same directory to child agents. A fresh session must start from the recorded challenge folder. A shell cd or the /new command does not relocate an existing parent-directory session.
+
+Bundled reference text may use `/ctf-web` or similar upstream shorthand. This runtime's user commands use `/skill:<name>` (for example, `/skill:ctf-web`); when working as the agent, read the exposed skill's SKILL.md rather than trying to execute a slash command in Bash. `$ARGUMENTS` in a reference is a placeholder for the user's task, not a shell variable to evaluate.
+
 The built-in web research and subagent tools retain their registered tool names. Use those names as exposed by the running session. Normal startup is intentionally quiet, not network-isolated: model requests and research tools can access the network. Never publish authentication files, API keys, browser cookies, session history, or private challenge data.

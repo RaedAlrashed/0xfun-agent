@@ -19,6 +19,8 @@ The Piolium adapter only suppresses its exact unsolicited informational welcome 
 
 The CTF web3 reference had one portability-only change: an author's absolute Foundry path was replaced with `$HOME/.foundry/bin`. Resource checksums in `profile/inventory.json` describe the actual distributed snapshot.
 
+The bundled `solve-challenge` entrypoint is adapted for this distribution: it omits the unshipped upstream installer, follows the per-challenge folder/checkpoint workflow, uses `/skill:<name>` commands, and generates a writeup only when requested. The underlying CTF references retain upstream attribution.
+
 ## Material not redistributed
 
 The author's machine also has synced desktop/browser, document, and host-integration skills. Several carry proprietary terms explicitly prohibiting reproduction or redistribution, and others have no independently verified redistribution grant or require host-only connectors. They are **not** included in this public distribution. This exclusion does not remove or modify them on the author's machine. No proprietary license text or proprietary skill contents are copied into this repository.
