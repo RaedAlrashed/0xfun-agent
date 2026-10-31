@@ -31,12 +31,18 @@ The agent can read and change files and execute commands with your user's permis
 
 ## Install: macOS, Linux, or Windows Git Bash
 
-> Official source: **[xlBABA/0xfun-agent](https://github.com/xlBABA/0xfun-agent)**. This distribution is not published to npm; do not use `npm install -g 0xfun` from the public registry.
+> Project Repository: **[RaedAlrashed/0xfun-agent](https://github.com/RaedAlrashed/0xfun-agent)**.
+>
+> Team Repository: **[xlBABA/0xfun-agent](https://github.com/xlBABA/0xfun-agent)**.
+>
+> This project was developed collaboratively as a team project.
+>
+> This distribution is not published to npm; do not use `npm install -g 0xfun` from the public registry.
 
 From Bash, these same two commands work on all three systems once the prerequisites are installed:
 
 ```bash
-git clone --branch main https://github.com/xlBABA/0xfun-agent.git 0xfun && cd 0xfun
+git clone --branch main https://github.com/RaedAlrashed/0xfun-agent.git 0xfun && cd 0xfun
 npm ci --ignore-scripts && npm run setup
 ```
 
@@ -61,7 +67,7 @@ node bin/0xfun.mjs
 `main` installs the current main-branch commit, including changes listed under **Unreleased** in the changelog. For the original v1.1 release, check out its existing tag before installing:
 
 ```bash
-git clone --branch v1.1.0 https://github.com/xlBABA/0xfun-agent.git 0xfun && cd 0xfun
+git clone --branch v1.1.0 https://github.com/RaedAlrashed/0xfun-agent.git 0xfun && cd 0xfun
 npm ci --ignore-scripts && npm run setup
 ```
 
@@ -89,7 +95,7 @@ winget install --id Git.Git --exact
 Or install from PowerShell (including Windows PowerShell 5.1):
 
 ```powershell
-git clone --branch main https://github.com/xlBABA/0xfun-agent.git 0xfun
+git clone --branch v1.1.0 https://github.com/RaedAlrashed/0xfun-agent.git 0xfun && cd 0xfun
 Set-Location 0xfun
 npm.cmd ci --ignore-scripts
 npm.cmd run setup
